@@ -1,13 +1,39 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- character encoding -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/smeshdoku.png" />
+    
+    <!-- responsive viewport sizing -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- page title -->
     <title>Смешдоку</title>
+    
+    <!-- favicon -->
+    <link rel="icon" type="image/svg+xml" href="/smeshdoku.png" />
+    
+    <!-- standard search engine description -->
+    <meta name="description" content="Смешдоку: судоку с персонажами из смешариков." />
+
+    <!-- open graph protocol tags -->
+    <meta property="og:title" content="Смешдоку" />
+    <meta property="og:description" content="Смешдоку: судоку с персонажами из смешариков." />
+    <meta property="og:image" content="https://github.com/TimurCravtov/Smeshdoku/blob/main/public/og.png?raw=true" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://smeshdoku.online" />
+
+    <!-- twitter card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Смешдоку" />
+    <meta name="twitter:description" content="Смешдоку: судоку с персонажами из смешариков." />
+    <meta name="twitter:image" content="https://github.com/TimurCravtov/Smeshdoku/blob/main/public/og.png?raw=true" />
   </head>
   <body>
+    <!-- main application container -->
     <div id="root"></div>
+    
+    <!-- application entry point -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
