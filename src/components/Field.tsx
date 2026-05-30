@@ -169,157 +169,156 @@ export default function SudokuBoard() {
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden bg-[#FFF8E6] bg-[url('/bg.jpg')] bg-cover bg-center text-[#6C5A47] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B] focus-visible:ring-offset-4 focus-visible:ring-offset-[#FFF5DF]"
+      className="w-full max-w-[620px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B] focus-visible:ring-offset-4 focus-visible:ring-offset-[#FFF5DF]"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
-      <div className="pointer-events-none absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[#F3E1AF] opacity-70 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-[-110px] right-[-70px] h-72 w-72 rounded-full bg-[#EED9A1] opacity-60 blur-3xl" />
+      <div className="mb-4 flex items-center justify-center gap-3">
+        <img
+          src="/smeshdoku.png"
+          alt="Смешдоку"
+          width={80}
+          height={48}
+          className="object-contain"
+          draggable={false}
+        />
+      </div>
 
-      <div className="relative z-10 flex min-h-screen w-full flex-col items-center px-4 py-10 font-['Fraunces']">
-        <div className="w-full max-w-[620px]">
-          <div className="mb-4 flex items-center justify-center gap-3">
-
-            <img src="/smeshdoku.png" alt="Смешдоку" width={80} height={48} className="object-contain" draggable={false} />
-          </div>
-          
-          <div className="flex justify-center">
-            <div className="w-fit rounded-[26px] bg-[#EAEACB] p-6 shadow-[0_40px_80px_#E0C58066]">
-              <div className="w-fit rounded-[22px] bg-[#F7EEC9] p-5">
-                {/* Grid: no gap, borders handled per-cell for precise Sudoku lines */}
-                <div className="inline-grid grid-cols-9" style={{ borderCollapse: "collapse" }}>
-                  {board.map((row, rIdx) =>
-                    row.map((val, cIdx) => (
-                      <div
-                        key={`${rIdx}-${cIdx}`}
-                        className={[
-                          "relative flex h-[54px] w-[54px] items-center justify-center",
-                          "transition-colors duration-150 select-none cursor-pointer",
-                          getCellBgClass(rIdx, cIdx),
-                          selected?.row === rIdx && selected?.col === cIdx
-                            ? "ring-2 ring-inset ring-[#CBA659]"
-                            : "",
-                        ].join(" ")}
-                        style={getCellBorderStyle(rIdx, cIdx)}
-                        onClick={() => handleCellClick(rIdx, cIdx)}
-                      >
-                        {val !== 0 &&
-                          (SMESHARIK_MAP[val] ? (
-                            <>
-                              <img
-                                src={SMESHARIK_MAP[val]}
-                                alt={`Смешарик ${val}`}
-                                width={45}
-                                height={45}
-                                className="object-contain"
-                                draggable={false}
-                              />
-                              <span className="absolute left-1 top-1 text-[10px] font-semibold leading-none text-[#5B411E] [text-shadow:0_0_2px_#FDF6E3]">
-                                {val}
-                              </span>
-                            </>
-                          ) : (
-                            <span className={getTextClasses(rIdx, cIdx)}>{val}</span>
-                          ))}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
+      <div className="flex justify-center">
+        <div className="w-fit rounded-[26px] bg-[#EAEACB] p-6 shadow-[0_40px_80px_#E0C58066]">
+          <div className="w-fit rounded-[22px] bg-[#F7EEC9] p-5">
+            {/* Grid: no gap, borders handled per-cell for precise Sudoku lines */}
+            <div className="inline-grid grid-cols-9" style={{ borderCollapse: "collapse" }}>
+              {board.map((row, rIdx) =>
+                row.map((val, cIdx) => (
+                  <div
+                    key={`${rIdx}-${cIdx}`}
+                    className={[
+                      "relative flex h-[54px] w-[54px] items-center justify-center",
+                      "transition-colors duration-150 select-none cursor-pointer",
+                      getCellBgClass(rIdx, cIdx),
+                      selected?.row === rIdx && selected?.col === cIdx
+                        ? "ring-2 ring-inset ring-[#CBA659]"
+                        : "",
+                    ].join(" ")}
+                    style={getCellBorderStyle(rIdx, cIdx)}
+                    onClick={() => handleCellClick(rIdx, cIdx)}
+                  >
+                    {val !== 0 &&
+                      (SMESHARIK_MAP[val] ? (
+                        <>
+                          <img
+                            src={SMESHARIK_MAP[val]}
+                            alt={`Смешарик ${val}`}
+                            width={45}
+                            height={45}
+                            className="object-contain"
+                            draggable={false}
+                          />
+                          <span className="absolute left-1 top-1 text-[10px] font-semibold leading-none text-[#5B411E] [text-shadow:0_0_2px_#FDF6E3]">
+                            {val}
+                          </span>
+                        </>
+                      ) : (
+                        <span className={getTextClasses(rIdx, cIdx)}>{val}</span>
+                      ))}
+                  </div>
+                ))
+              )}
             </div>
           </div>
-
-          <div className="mt-6 flex justify-center">
-            <div className="inline-grid grid-cols-9 justify-items-center gap-2">
-              {numpadNums.map((n) => (
-                <button
-                  key={n}
-                  onClick={() => handleNumpad(n)}
-                  className="relative flex h-12 w-12 items-center justify-center rounded-[12px] border border-[#E1D0A7] bg-[#F6EBC8] text-lg font-semibold text-[#6B5A44] shadow-[0_6px_16px_#E1D0A733] transition hover:bg-[#F0E1B8] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B]"
-                >
-                  {SMESHARIK_MAP[n] ? (
-                    <>
-                      <img
-                        src={SMESHARIK_MAP[n]}
-                        alt={`Смешарик ${n}`}
-                        width={32}
-                        height={32}
-                        className="object-contain"
-                        draggable={false}
-                      />
-                      <span className="absolute left-1 top-1 text-[10px] font-semibold leading-none text-[#6B5A44] [text-shadow:0_0_2px_#FDF6E3]">
-                        {n}
-                      </span>
-                    </>
-                  ) : (
-                    n
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <button
-              onClick={handleReset}
-              className="rounded-full border-2 border-[#C9A85E] bg-[#F6E7BB] px-6 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6C4F2A] shadow-[0_8px_18px_#E1C57F66] transition hover:bg-[#F1E0A8] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B]"
-            >
-              Сброс
-            </button>
-            <button
-              onClick={() => {
-                setShowDifficulty(true);
-              }}
-              className="rounded-full border-2 border-[#D98C50] bg-[#F9E1C2] px-6 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#A85A1D] shadow-[0_8px_18px_#E1B48C66] transition hover:bg-[#F4D2A6] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D98C50]"
-            >
-              Новая игра
-            </button>
-          </div>
-
-          {showDifficulty && (
-            <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 px-4">
-              <div className="relative w-full max-w-[520px] rounded-[28px] border-4 border-[#7BC5F0] bg-[#1E9AD8] px-6 py-8 text-center shadow-[0_30px_80px_#0B6EA84D]">
-                <button
-                  onClick={() => setShowDifficulty(false)}
-                  className="absolute right-4 top-4 h-7 w-7 rounded-full border-2 border-[#E8F6FF] text-[16px] font-bold text-[#E8F6FF]"
-                  aria-label="Закрыть"
-                >
-                  ×
-                </button>
-                <div className="mb-6 text-[20px] font-semibold text-white sm:text-[22px]">
-                  Выберите сложность
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    onClick={() => startNewGame(1)}
-                    className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-                  >
-                    Легко
-                  </button>
-                  <button
-                    onClick={() => startNewGame(2)}
-                    className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-                  >
-                    Средне
-                  </button>
-                  <button
-                    onClick={() => startNewGame(3)}
-                    className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-                  >
-                    Сложно
-                  </button>
-                  <button
-                    onClick={() => startNewGame(4)}
-                    className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-                  >
-                    Эксперт
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      <div className="mt-6 flex justify-center">
+        <div className="inline-grid grid-cols-9 justify-items-center gap-2">
+          {numpadNums.map((n) => (
+            <button
+              key={n}
+              onClick={() => handleNumpad(n)}
+              className="relative flex h-12 w-12 items-center justify-center rounded-[12px] border border-[#E1D0A7] bg-[#F6EBC8] text-lg font-semibold text-[#6B5A44] shadow-[0_6px_16px_#E1D0A733] transition hover:bg-[#F0E1B8] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B]"
+            >
+              {SMESHARIK_MAP[n] ? (
+                <>
+                  <img
+                    src={SMESHARIK_MAP[n]}
+                    alt={`Смешарик ${n}`}
+                    width={32}
+                    height={32}
+                    className="object-contain"
+                    draggable={false}
+                  />
+                  <span className="absolute left-1 top-1 text-[10px] font-semibold leading-none text-[#6B5A44] [text-shadow:0_0_2px_#FDF6E3]">
+                    {n}
+                  </span>
+                </>
+              ) : (
+                n
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <button
+          onClick={handleReset}
+          className="rounded-full border-2 border-[#C9A85E] bg-[#F6E7BB] px-6 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6C4F2A] shadow-[0_8px_18px_#E1C57F66] transition hover:bg-[#F1E0A8] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B]"
+        >
+          Сброс
+        </button>
+        <button
+          onClick={() => {
+            setShowDifficulty(true);
+          }}
+          className="rounded-full border-2 border-[#D98C50] bg-[#F9E1C2] px-6 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#A85A1D] shadow-[0_8px_18px_#E1B48C66] transition hover:bg-[#F4D2A6] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D98C50]"
+        >
+          Новая игра
+        </button>
+      </div>
+
+      {showDifficulty && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 px-4">
+          <div className="relative w-full max-w-[520px] rounded-[28px] border-4 border-[#7BC5F0] bg-[#1E9AD8] px-6 py-8 text-center shadow-[0_30px_80px_#0B6EA84D]">
+            <button
+              onClick={() => setShowDifficulty(false)}
+              className="absolute right-4 top-4 h-7 w-7 rounded-full border-2 border-[#E8F6FF] text-[16px] font-bold text-[#E8F6FF]"
+              aria-label="Закрыть"
+            >
+              ×
+            </button>
+            <div className="mb-6 text-[20px] font-semibold text-white sm:text-[22px]">
+              Выберите сложность
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={() => startNewGame(1)}
+                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
+              >
+                Легко
+              </button>
+              <button
+                onClick={() => startNewGame(2)}
+                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
+              >
+                Средне
+              </button>
+              <button
+                onClick={() => startNewGame(3)}
+                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
+              >
+                Сложно
+              </button>
+              <button
+                onClick={() => startNewGame(4)}
+                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
+              >
+                Эксперт
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
