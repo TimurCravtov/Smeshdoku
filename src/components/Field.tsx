@@ -28,6 +28,8 @@ export default function SudokuBoard() {
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [completed, setCompleted] = useState<boolean>(false);
   const [showDifficulty, setShowDifficulty] = useState<boolean>(false);
+  // holds the visibility state of the author info modal
+  const [showAuthor, setShowAuthor] = useState<boolean>(false);
 
   const checkCompletion = useCallback((b: number[][]): boolean => checkIfCompleted(b), []);
   const isFixed = (row: number, col: number): boolean => game.puzzle[row][col] !== 0;
@@ -97,7 +99,7 @@ export default function SudokuBoard() {
   const isSameNum = (r1: number, c1: number, r2: number, c2: number): boolean =>
     board[r1][c1] !== 0 && board[r1][c1] === board[r2][c2];
 
-  // Returns inline border styles to create thick 3x3 box lines and a thick outer border
+  // returns inline border styles to create thick 3x3 box lines and a thick outer border
   const getCellBorderStyle = (row: number, col: number): CSSProperties => {
     const borderThin = "1px solid #C8BC92";
     const borderThick = "2.5px solid #8B7340";
@@ -167,6 +169,9 @@ export default function SudokuBoard() {
     setBoard(newBoard);
   };
 
+  // toggles the visibility state of the author info modal
+  const handleToggleAuthor = () => setShowAuthor((prev) => !prev);
+
   return (
     <div
       className="w-full max-w-[620px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B] focus-visible:ring-offset-4 focus-visible:ring-offset-[#FFF5DF]"
@@ -182,20 +187,48 @@ export default function SudokuBoard() {
           className="object-contain"
           draggable={false}
         />
-        <img
+        <div 
+          className="relative cursor-pointer"
+          onMouseEnter={() => setShowAuthor(true)}
+          onMouseLeave={() => setShowAuthor(false)}
+          onClick={handleToggleAuthor}
+        >
+          <img
             src="q.png"
             alt="Q"
             width={48}
             height={48}
             className="object-contain"
             draggable={false}
-        />
+          />
+          
+          {showAuthor && (
+            <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[200px] bg-[#6b5528] rounded-2xl p-4 shadow-xl border border-[#2e230e] z-50 text-center">
+                <p className="text-sm font-semibold text-[#f3ecc7] mb-2">Автор: tima40</p>
+                <img 
+                src="/author.png" 
+                alt="автор" 
+                width={40}
+                height={40}
+                className="mx-auto mb-2 rounded-full object-cover" 
+                />
+                <a 
+                href="https://github.com/TimurCravtov/Smeshdoku" 
+                target="_blank" 
+                rel="noreferrer"
+                className="text-xs text-[#45B2E6] hover:underline"
+                >
+                Github
+                </a>
+            </div>
+            )}
+        </div>
       </div>
 
       <div className="flex justify-center">
         <div className="w-fit rounded-[26px] bg-[#EAEACB] p-6 shadow-[0_40px_80px_#E0C58066]">
           <div className="w-fit rounded-[22px] bg-[#F7EEC9] p-5">
-            {/* Grid: no gap, borders handled per-cell for precise Sudoku lines */}
+            {/* grid: no gap, borders handled per-cell for precise sudoku lines */}
             <div className="inline-grid grid-cols-9" style={{ borderCollapse: "collapse" }}>
               {board.map((row, rIdx) =>
                 row.map((val, cIdx) => (
@@ -285,48 +318,33 @@ export default function SudokuBoard() {
         </button>
       </div>
 
-       {showDifficulty && (
-         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 px-4">
-           <div className="relative max-w-[520px] rounded-[28px] border-4 border-[#7BC5F0] bg-[#1E9AD8] px-6 py-8 text-center shadow-[0_30px_80px_#0B6EA84D]">
+      {showDifficulty && (
+        <div
+            className="fixed inset-0 z-40 flex items-center justify-center  px-4"
+            onClick={(e) => {
+            if (e.target === e.currentTarget) setShowDifficulty(false);
+            }}
+        >
+            <div className="relative w-full max-w-[520px] w-[400px] rounded-[28px] border-4 border-[#7BC5F0] bg-[#1E9AD8] px-6 py-8 text-center shadow-[0_30px_80px_#0B6EA84D]">
             <button
-              onClick={() => setShowDifficulty(false)}
-              className="absolute right-4 top-4 h-7 w-7 rounded-full border-2 border-[#E8F6FF] text-[16px] font-bold text-[#E8F6FF]"
-              aria-label="Закрыть"
+                onClick={() => setShowDifficulty(false)}
+                className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#E8F6FF] text-[16px] font-bold text-[#E8F6FF]"
+                aria-label="Закрыть"
             >
-              ×
+                ×
             </button>
-            <div className="mb-6 text-[20px] font-semibold text-white sm:text-[22px]">
-              Выберите сложность
+            <div className="mb-6 text-[20px] font-semibold text-[#ffffff] sm:text-[40px]">
+                Выберите сложность
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={() => startNewGame(1)}
-                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-              >
-                Легко
-              </button>
-              <button
-                onClick={() => startNewGame(2)}
-                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-              >
-                Средне
-              </button>
-              <button
-                onClick={() => startNewGame(3)}
-                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-              >
-                Сложно
-              </button>
-              <button
-                onClick={() => startNewGame(4)}
-                className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-white shadow-[inset_0_2px_0_#9AD8F4]"
-              >
-                Эксперт
-              </button>
+                <button onClick={() => startNewGame(1)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Легко</button>
+                <button onClick={() => startNewGame(2)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Средне</button>
+                <button onClick={() => startNewGame(3)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Сложно</button>
+                <button onClick={() => startNewGame(4)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Эксперт</button>
             </div>
-          </div>
+            </div>
         </div>
-      )}
+)}
     </div>
   );
 }
