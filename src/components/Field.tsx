@@ -277,9 +277,9 @@ export default function SudokuBoard() {
         </button>
       </div>
 
-      {showDifficulty && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 px-4">
-          <div className="relative w-full max-w-[520px] rounded-[28px] border-4 border-[#7BC5F0] bg-[#1E9AD8] px-6 py-8 text-center shadow-[0_30px_80px_#0B6EA84D]">
+       {showDifficulty && (
+         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 px-4">
+           <div className="relative max-w-[520px] rounded-[28px] border-4 border-[#7BC5F0] bg-[#1E9AD8] px-6 py-8 text-center shadow-[0_30px_80px_#0B6EA84D]">
             <button
               onClick={() => setShowDifficulty(false)}
               className="absolute right-4 top-4 h-7 w-7 rounded-full border-2 border-[#E8F6FF] text-[16px] font-bold text-[#E8F6FF]"
