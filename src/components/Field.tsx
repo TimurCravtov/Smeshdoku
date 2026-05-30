@@ -23,11 +23,11 @@ interface CellCoords {
 }
 
 export default function SudokuBoard() {
-  const [game, setGame] = useState<SudokuGame>(() => createGame(1));
+  const [game, setGame] = useState<SudokuGame>(() => createGame(3));
   const [board, setBoard] = useState<number[][]>(() => cloneBoard(game.puzzle));
   const [selected, setSelected] = useState<CellCoords | null>(null);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
-  const [completed, setCompleted] = useState<boolean>(false);
+  const [_, setCompleted] = useState<boolean>(false);
   const [showDifficulty, setShowDifficulty] = useState<boolean>(false);
   // holds the visibility state of the author info modal
   const [showAuthor, setShowAuthor] = useState<boolean>(false);
@@ -324,10 +324,14 @@ export default function SudokuBoard() {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <div className="mt-[20px] flex flex-wrap items-center justify-center gap-3">
         <button
           onClick={handleReset}
-          className="rounded-full border-2 border-[#C9A85E] bg-[#F6E7BB] px-6 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#6C4F2A] shadow-[0_8px_18px_#E1C57F66] transition hover:bg-[#F1E0A8] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B]"
+          className="rounded-[16px] border-2 border-[#C9A85E] bg-[#F6E7BB] px-8 py-2.5
+      text-[11px] font-bold uppercase tracking-[0.22em] text-[#6C4F2A]
+      shadow-[inset_0_2px_0_#fffbe8,0_4px_12px_#E1C57F44]
+      transition hover:bg-[#F1E0A8] active:scale-95 active:shadow-none
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B] h-[32px]"
         >
           Сброс
         </button>
@@ -335,7 +339,11 @@ export default function SudokuBoard() {
           onClick={() => {
             setShowDifficulty(true);
           }}
-          className="rounded-full border-2 border-[#D98C50] bg-[#F9E1C2] px-6 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#A85A1D] shadow-[0_8px_18px_#E1B48C66] transition hover:bg-[#F4D2A6] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D98C50]"
+          className="rounded-[16px] border-2 border-[#D98C50] bg-[#F9E1C2] px-8 py-2.5
+      text-[11px] font-bold uppercase tracking-[0.22em] text-[#A85A1D]
+      shadow-[inset_0_2px_0_#fff5e8,0_4px_12px_#E1B48C44]
+      transition hover:bg-[#F4D2A6] active:scale-95 active:shadow-none
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D98C50] h-[32px]"
         >
           Новая игра
         </button>
