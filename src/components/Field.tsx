@@ -182,6 +182,14 @@ export default function SudokuBoard() {
           className="object-contain"
           draggable={false}
         />
+        <img
+            src="q.png"
+            alt="Q"
+            width={48}
+            height={48}
+            className="object-contain"
+            draggable={false}
+        />
       </div>
 
       <div className="flex justify-center">
