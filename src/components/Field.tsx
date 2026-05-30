@@ -253,6 +253,17 @@ export default function SudokuBoard() {
                     </svg>
                     Smeshdoku
                   </a>
+                  <a
+                    href="https://www.instagram.com/7hym1n3"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 text-[12px] text-[#f3ecc7]/80 hover:text-[#f3ecc7] transition-colors group"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="opacity-70 group-hover:opacity-100">
+                      <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zm4.75-2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5z" />
+                    </svg>
+                    Instagram
+                  </a>
                 </div>
               </div>
             )}
