@@ -1,5 +1,6 @@
 import { useState, useCallback, type KeyboardEvent, type CSSProperties } from "react";
 import { generateField, checkIfCompleted, checkIfValid, type SudokuGame } from "../lib/sudoku_helpers";
+import { createPortal } from "react-dom";
 
 const SMESHARIK_MAP: Record<number, string> = {
   1: "/ejik.png",
@@ -173,6 +174,8 @@ export default function SudokuBoard() {
   const handleToggleAuthor = () => setShowAuthor((prev) => !prev);
 
   return (
+    <div className="relative">
+
     <div
       className="w-full max-w-[620px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B46B] focus-visible:ring-offset-4 focus-visible:ring-offset-[#FFF5DF]"
       tabIndex={0}
@@ -203,25 +206,45 @@ export default function SudokuBoard() {
           />
           
           {showAuthor && (
-            <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[200px] bg-[#6b5528] rounded-2xl p-4 shadow-xl border border-[#2e230e] z-50 text-center">
-                <p className="text-sm font-semibold text-[#f3ecc7] mb-2">Автор: tima40</p>
-                <img 
-                src="/author.png" 
-                alt="автор" 
-                width={40}
-                height={40}
-                className="mx-auto mb-2 rounded-full object-cover" 
-                />
-                <a 
-                href="https://github.com/TimurCravtov/Smeshdoku" 
-                target="_blank" 
-                rel="noreferrer"
-                className="text-xs text-[#45B2E6] hover:underline"
-                >
-                Github
-                </a>
-            </div>
-            )}
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-[8px] w-[220px] z-50
+                    bg-gradient-to-b from-[#7a6235] to-[#4e3a1e]
+                    rounded-[20px] p-4 shadow-2xl
+                    border border-[#c9a85e]/40
+                    backdrop-blur-sm">
+
+                    {/* аватар */}
+                    <div className="flex flex-col items-center gap-2 pt-2 mt-2">
+                    <div className="relative">
+                        <img
+                        src="/author.png"
+                        alt="автор"
+                        width={52}
+                        height={52}
+                        className="rounded-full object-cover ring-2 ring-[#c9a85e]/60 ring-offset-2 ring-offset-[#5a3e1e]"
+                        />
+                    </div>
+
+                    <div className="text-center">
+                        <p className="text-[13px] font-bold text-[#f3ecc7] tracking-wide">tima40</p>
+                        <p className="text-[10px] text-[#c9a85e]/70 uppercase tracking-widest">автор</p>
+                    </div>
+
+                    <div className="w-full h-px bg-[#c9a85e]/20 my-1" />
+
+                    <a
+                        href="https://github.com/TimurCravtov/Smeshdoku"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1.5 text-[12px] text-[#f3ecc7]/80 hover:text-[#f3ecc7] mb-[200px]transition-colors group"
+                    >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="opacity-70 group-hover:opacity-100">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        Smeshdoku
+                    </a>
+                    </div>
+                </div>
+                )}
         </div>
       </div>
 
@@ -317,34 +340,61 @@ export default function SudokuBoard() {
           Новая игра
         </button>
       </div>
-
-      {showDifficulty && (
-        <div
-            className="fixed inset-0 z-40 flex items-center justify-center  px-4"
-            onClick={(e) => {
-            if (e.target === e.currentTarget) setShowDifficulty(false);
-            }}
-        >
-            <div className="relative w-full max-w-[520px] w-[400px] rounded-[28px] border-4 border-[#7BC5F0] bg-[#1E9AD8] px-6 py-8 text-center shadow-[0_30px_80px_#0B6EA84D]">
-            <button
-                onClick={() => setShowDifficulty(false)}
-                className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#E8F6FF] text-[16px] font-bold text-[#E8F6FF]"
-                aria-label="Закрыть"
-            >
-                ×
-            </button>
-            <div className="mb-6 text-[20px] font-semibold text-[#ffffff] sm:text-[40px]">
-                Выберите сложность
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-                <button onClick={() => startNewGame(1)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Легко</button>
-                <button onClick={() => startNewGame(2)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Средне</button>
-                <button onClick={() => startNewGame(3)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Сложно</button>
-                <button onClick={() => startNewGame(4)} className="rounded-[16px] border-4 border-[#0D78B4] bg-[#45B2E6] py-3 text-[14px] font-bold uppercase tracking-[0.2em] text-[#ffffff] shadow-[inset_0_2px_0_#9AD8F4]">Эксперт</button>
-            </div>
-            </div>
-        </div>
-)}
     </div>
+
+          {showDifficulty && createPortal(
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      zIndex: 9999,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(0,0,0,0.4)",
+      padding: "16px",
+    }}
+    onClick={(e) => { if (e.target === e.currentTarget) setShowDifficulty(false); }}
+  >
+    <div style={{
+      position: "relative",
+      width: "100%",
+      maxWidth: "400px",
+      borderRadius: "28px",
+      border: "4px solid #7BC5F0",
+      background: "#1E9AD8",
+      padding: "32px 24px",
+      textAlign: "center",
+    }}>
+      <button
+        onClick={() => setShowDifficulty(false)}
+        style={{
+          position: "absolute", right: 16, top: 16,
+          width: 28, height: 28, borderRadius: "50%",
+          border: "2px solid #E8F6FF", background: "transparent",
+          color: "#E8F6FF", fontSize: 18, fontWeight: "bold",
+          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+        }}
+      >×</button>
+      <div style={{ marginBottom: 24, fontSize: 20, fontWeight: 600, color: "#fff" }}>
+        Выберите сложность
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        {([["Легко", 1], ["Средне", 2], ["Сложно", 3], ["Эксперт", 4]] as const).map(([label, lvl]) => (
+          <button key={lvl} onClick={() => startNewGame(lvl)} style={{
+            borderRadius: 16, border: "4px solid #0D78B4", background: "#45B2E6",
+            padding: "12px", fontSize: 14, fontWeight: 700,
+            letterSpacing: "0.2em", textTransform: "uppercase", color: "#fff",
+            cursor: "pointer", boxShadow: "inset 0 2px 0 #9AD8F4",
+          }}>{label}</button>
+        ))}
+      </div>
+    </div>
+  </div>,
+  document.body
+)}
+
+    </div>
+
   );
 }
