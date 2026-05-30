@@ -1,6 +1,7 @@
-import { useState, useCallback, type KeyboardEvent, type CSSProperties } from "react";
-import { generateField, checkIfCompleted, checkIfValid, type SudokuGame } from "../lib/sudoku_helpers";
+import { useState, type KeyboardEvent, type CSSProperties } from "react";
+import { generateField, checkIfValid, type SudokuGame } from "../lib/sudoku_helpers";
 import { createPortal } from "react-dom";
+import EndGameModal from "./EndGameModal";
 
 const SMESHARIK_MAP: Record<number, string> = {
   1: "/ejik.png",
@@ -27,12 +28,24 @@ export default function SudokuBoard() {
   const [board, setBoard] = useState<number[][]>(() => cloneBoard(game.puzzle));
   const [selected, setSelected] = useState<CellCoords | null>(null);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
-  const [_, setCompleted] = useState<boolean>(false);
   const [showDifficulty, setShowDifficulty] = useState<boolean>(false);
   const [showAuthor, setShowAuthor] = useState<boolean>(false);
+  const [showEndGame, setShowEndGame] = useState<boolean>(false);
+  const [endGameSuccess, setEndGameSuccess] = useState<boolean>(false);
 
-  const checkCompletion = useCallback((b: number[][]): boolean => checkIfCompleted(b), []);
   const isFixed = (row: number, col: number): boolean => game.puzzle[row][col] !== 0;
+  const isBoardFull = (b: number[][]): boolean => b.every((row) => row.every((cell) => cell !== 0));
+
+  const updateEndGameState = (nextBoard: number[][]): void => {
+    if (isBoardFull(nextBoard)) {
+      const success = checkIfValid(nextBoard);
+      setEndGameSuccess(success);
+      setShowEndGame(true);
+    } else {
+      setEndGameSuccess(false);
+      setShowEndGame(false);
+    }
+  };
 
   const handleCellClick = (row: number, col: number): void => {
     setSelected({ row, col });
@@ -53,7 +66,7 @@ export default function SudokuBoard() {
       const key = `${row}-${col}`;
       setErrors((prev) => ({ ...prev, [key]: !valid }));
       setBoard(newBoard);
-      if (valid && checkCompletion(newBoard)) setCompleted(true);
+      updateEndGameState(newBoard);
     } else if (e.key === "Backspace" || e.key === "Delete" || e.key === "0") {
       if (isFixed(row, col)) return;
       const newBoard = board.map((r) => [...r]);
@@ -64,7 +77,7 @@ export default function SudokuBoard() {
         return n;
       });
       setBoard(newBoard);
-      setCompleted(false);
+      updateEndGameState(newBoard);
     } else if (e.key === "ArrowUp" && row > 0) {
       setSelected({ row: row - 1, col });
     } else if (e.key === "ArrowDown" && row < 8) {
@@ -80,7 +93,8 @@ export default function SudokuBoard() {
     setBoard(cloneBoard(game.puzzle));
     setSelected(null);
     setErrors({});
-    setCompleted(false);
+    setShowEndGame(false);
+    setEndGameSuccess(false);
   };
 
   const startNewGame = (level: 1 | 2 | 3 | 4): void => {
@@ -88,7 +102,8 @@ export default function SudokuBoard() {
     setGame(newGame);
     setBoard(cloneBoard(newGame.puzzle));
     setErrors({});
-    setCompleted(false);
+    setShowEndGame(false);
+    setEndGameSuccess(false);
     setSelected(null);
     setShowDifficulty(false);
   };
@@ -163,9 +178,9 @@ export default function SudokuBoard() {
       newBoard[row][col] = num;
       const valid = checkIfValid(newBoard);
       setErrors((prev) => ({ ...prev, [`${row}-${col}`]: !valid }));
-      if (valid && checkCompletion(newBoard)) setCompleted(true);
     }
     setBoard(newBoard);
+    updateEndGameState(newBoard);
   };
 
   const handleToggleAuthor = () => setShowAuthor((prev) => !prev);
@@ -427,6 +442,17 @@ export default function SudokuBoard() {
           </div>
         </div>,
         document.body
+      )}
+
+      {showEndGame && (
+        <EndGameModal
+          success={endGameSuccess}
+          onClose={() => setShowEndGame(false)}
+          onNewGame={() => {
+            setShowEndGame(false);
+            setShowDifficulty(true);
+          }}
+        />
       )}
     </div>
   );
