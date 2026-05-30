@@ -297,9 +297,7 @@ export default function SudokuBoard() {
                               }}
                               draggable={false}
                             />
-                            <span className="absolute left-[2px] top-[2px] text-[clamp(7px,1.5vw,10px)] font-semibold leading-none text-[#5B411E] [text-shadow:0_0_2px_#FDF6E3]">
-                              {val}
-                            </span>
+                           
                           </>
                         ) : (
                           <span className={getTextClasses(rIdx, cIdx)}>{val}</span>
@@ -344,9 +342,6 @@ export default function SudokuBoard() {
                       }}
                       draggable={false}
                     />
-                    <span className="absolute left-[2px] top-[2px] text-[clamp(7px,1.5vw,10px)] font-semibold leading-none text-[#6B5A44] [text-shadow:0_0_2px_#FDF6E3]">
-                      {n}
-                    </span>
                   </>
                 ) : (
                   n
